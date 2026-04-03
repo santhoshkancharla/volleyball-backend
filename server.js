@@ -15,7 +15,7 @@ const app = express();
 const server = http.createServer(app);
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: process.env.FRONTEND_URL,
   credentials: true
 }));
 app.use(express.json());
@@ -24,7 +24,7 @@ app.use('/uploads', express.static('uploads')); // For locally mocked image uplo
 // Socket.io Setup
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: process.env.FRONTEND_URL,
     credentials: true
   }
 });
@@ -33,7 +33,7 @@ app.set('io', io); // Make io accessible in controllers
 
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
-  
+
   socket.on('joinMatch', (matchId) => {
     socket.join(`match_${matchId}`);
     console.log(`Socket ${socket.id} joined match_${matchId}`);
